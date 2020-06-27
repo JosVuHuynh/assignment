@@ -15,11 +15,13 @@ arr = [
 
 ]
 
+
 def main():
     eigen = EigenInstruction()
+    eigen.load_data(arr)
     request = Request(1, '2020-06-24 20:58:18', '2020-06-24 20:58:18')
-    w, v = eigen.get_eigen(request)
-    print(v)
+    paulVl, paulVt = eigen.get_eigen(request)
+    print(paulVl, paulVt)
 
 
 if __name__ == '__main__':

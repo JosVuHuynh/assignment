@@ -9,9 +9,6 @@ class EigenInstruction:
     def __init__(self):
         pass
 
-    def load_data(self):
-        pass
-
     def database_connection(self):
         """
         :return db: connection
@@ -22,8 +19,25 @@ class EigenInstruction:
         except:
             print("connect database is fail!")
 
+    def load_data(self, arr):
+        """
+        clear table and insert new data
+        :param arr: array
+        """
+        db = self.database_connection()
+        cursor = db.cursor()
+        clear_table = 'TRUNCATE db_app.links_pages'
+        cursor.execute(clear_table)
+        db.commit()
+        query = 'INSERT INTO db_app.links_pages(ID,User_ID,Page_Path,Referral_Path,Time)' \
+                'VALUES (NULL,%s,%s,%s,%s)'
+        for i in arr:
+            cursor.execute(query, (i['User_ID'], i['Page_Path'], i['Referral_Path'], i['Time']))
+        db.commit()
+
     def list_page_path(self, user_id, t1, t2):
         """
+        :param user_id: user id
         :param t1: start time
                t2: end time
         :return lst: list of links in Page Path but not duplicate
@@ -45,6 +59,7 @@ class EigenInstruction:
 
     def link_matrix(self, user_id, t1, t2):
         """
+        :param user_id: user id
         :param t1: start time
                t2: end time
         :return A: link matrix
@@ -66,7 +81,7 @@ class EigenInstruction:
 
     def compute_eigen(self, matrix):
         """
-        :param self: a square matrix
+        :param: a square matrix
         :return: w: Eigenvalues
                  v: Eigenvectors
         """
